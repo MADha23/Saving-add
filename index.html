@@ -86,17 +86,19 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/512px-Google_Play_Store_badge_EN.svg.png" alt="Download on the Play Store">
     </div>
     <script>
-        let balance = 100;
+        let initialBalance = 100;
+        let balance = initialBalance;
         let tries = 0;
         const lossLimit = 0; // The amount of money the user can lose before the game stops
         const maxTries = 15; // Maximum number of tries
+        const maxLoss = 100; // Maximum loss allowed
 
         function updateBalance() {
             document.getElementById('balance').innerText = `Balance: $${balance}`;
         }
 
         function placeBet() {
-            if (balance <= lossLimit || tries >= maxTries) {
+            if (balance <= lossLimit || tries >= maxTries || (initialBalance - balance) >= maxLoss) {
                 return;
             }
 
@@ -127,7 +129,7 @@
             tries++;
             updateBalance();
 
-            if (balance <= lossLimit || tries >= maxTries) {
+            if (balance <= lossLimit || tries >= maxTries || (initialBalance - balance) >= maxLoss) {
                 document.getElementById('message').innerText = "Game over. You have reached the limit.";
                 document.getElementById('betButton').disabled = true;
                 document.getElementById('depositAmount').disabled = true;
@@ -147,6 +149,7 @@
                 return;
             }
             balance += depositAmount;
+            initialBalance = balance; // Reset initial balance to include the deposit
             document.getElementById('message').innerText = `You deposited $${depositAmount}.`;
             updateBalance();
         }
