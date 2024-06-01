@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aided Gambling</title>
+    <style>
+        @font-face {
+            font-family: 'Algerian';
+            src: url('https://example.com/path-to-your-font/Algerian.ttf') format('truetype'); /* Replace with the correct path to your font file */
+        }
+        
+        body {
+            font-family: Algerian, Arial, sans-serif;
+            font-weight: bold;
+            background: url('https://i.pinimg.com/originals/29/05/2c/29052ce10cd14c4aad7fbdeb3c781567.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #betButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .control {
+            position: absolute;
+            top: 10px;
+        }
+
+        #depositControl {
+            left: 10px;
+        }
+
+        #withdrawControl {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="control" id="depositControl">
+        <input type="number" id="depositAmount" placeholder="Deposit Amount" max="100">
+        <button onclick="deposit()">Deposit</button>
+    </div>
+    <div class="control" id="withdrawControl">
+        <input type="number" id="withdrawAmount" placeholder="Withdraw Amount">
+        <button onclick="withdraw()">Withdraw</button>
+    </div>
+    <div class="container">
+        <h1>Aided Gambling</h1>
+        <p id="balance">Balance: $100</p>
+        <p id="message"></p>
+        <input type="number" id="betAmount" placeholder="Bet Amount" max="150">
+        <button id="betButton" onclick="placeBet()">Place Bet</button>
+    </div>
+    <script>
+        let balance = 100;
+        let tries = 0;
+        const lossLimit = 0; // The amount of money the user can lose before the game stops
+        const maxTries = 15; // Maximum number of tries
+
+        function updateBalance() {
+            document.getElementById('balance').innerText = `Balance: $${balance}`;
+        }
+
+        function placeBet() {
+            if (balance <= lossLimit || tries >= maxTries) {
+                return;
+            }
+
+            let betAmount = parseInt(document.getElementById('betAmount').value);
+            if (isNaN(betAmount) || betAmount <= 0) {
+                document.getElementById('message').innerText = "Invalid bet amount.";
+                return;
+            }
+            if (betAmount > 150) {
+                document.getElementById('message').innerText = "Bet limit is $150.";
+                return;
+            }
+            if (betAmount > balance) {
+                document.getElementById('message').innerText = "Insufficient balance to place this bet.";
+                return;
+            }
+
+            const win = Math.random() > 0.5; // 50% chance to win
+
+            if (win) {
+                balance += betAmount;
+                document.getElementById('message').innerText = `You won $${betAmount}!`;
+            } else {
+                balance -= betAmount;
+                document.getElementById('message').innerText = `You lost $${betAmount}!`;
+            }
+
+            tries++;
+            updateBalance();
+
+            if (balance <= lossLimit || tries >= maxTries) {
+                document.getElementById('message').innerText = "Game over. You have reached the limit.";
+                document.getElementById('betButton').disabled = true;
+                document.getElementById('depositAmount').disabled = true;
+                document.getElementById('withdrawAmount').disabled = true;
+                document.getElementById('betAmount').disabled = true;
+            }
+        }
+
+        function deposit() {
+            let depositAmount = parseInt(document.getElementById('depositAmount').value);
+            if (isNaN(depositAmount) || depositAmount <= 0) {
+                document.getElementById('message').innerText = "Invalid deposit amount.";
+                return;
+            }
+            if (depositAmount > 100) {
+                document.getElementById('message').innerText = "Deposit limit is $100.";
+                return;
+            }
+            balance += depositAmount;
+            document.getElementById('message').innerText = `You deposited $${depositAmount}.`;
+            updateBalance();
+        }
+
+        function withdraw() {
+            let withdrawAmount = parseInt(document.getElementById('withdrawAmount').value);
+            if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
+                document.getElementById('message').innerText = "Invalid withdrawal amount.";
+                return;
+            }
+            if (balance >= withdrawAmount) {
+                balance -= withdrawAmount;
+                document.getElementById('message').innerText = `You withdrew $${withdrawAmount}.`;
+                updateBalance();
+            } else {
+                document.getElementById('message').innerText = "Insufficient balance to withdraw.";
+            }
+        }
+
+        // Initial balance display
+        updateBalance();
+    </script>
+</body>
+</html>
