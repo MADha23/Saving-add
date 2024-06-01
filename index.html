@@ -9,17 +9,18 @@
             font-family: 'Algerian';
             src: url('https://example.com/path-to-your-font/Algerian.ttf') format('truetype'); /* Replace with the correct path to your font file */
         }
-        
+
         body {
             font-family: Algerian, Arial, sans-serif;
             font-weight: bold;
-            background: url('https://i.pinimg.com/originals/29/05/2c/29052ce10cd14c4aad7fbdeb3c781567.jpg') no-repeat center center fixed;
+            background: url('https://i.pinimg.com/originals/29/05/2c/29052ce10cd14c4aad7fbdeb3c781567.jpg') no-repeat center center fixed; /* Replace with your image URL */
             background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            position: relative;
         }
 
         .container {
@@ -49,6 +50,19 @@
         #withdrawControl {
             right: 10px;
         }
+
+        .download-image {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .download-image img {
+            width: 150px; /* Adjust the width as necessary */
+        }
     </style>
 </head>
 <body>
@@ -66,6 +80,10 @@
         <p id="message"></p>
         <input type="number" id="betAmount" placeholder="Bet Amount" max="150">
         <button id="betButton" onclick="placeBet()">Place Bet</button>
+    </div>
+    <div class="download-image">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the Apple Store">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/512px-Google_Play_Store_badge_EN.svg.png" alt="Download on the Play Store">
     </div>
     <script>
         let balance = 100;
