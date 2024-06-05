@@ -77,22 +77,26 @@
     </div>
     <div class="container">
         <h1>Aided Gambling</h1>
-        <p id="balance">Balance: $100</p>
+        <p id="balance">Balance: $0</p>
         <p id="message"></p>
         <input type="number" id="betAmount" placeholder="Bet Amount" max="150">
         <button id="betButton" onclick="placeBet()">Place Bet</button>
+        <p id="timer" style="display: none;">Time remaining to play again: 24:00:00</p>
     </div>
     <div class="download-image">
         <img id="appleStore" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the Apple Store">
         <img id="playStore" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/512px-Google_Play_Store_badge_EN.svg.png" alt="Download on the Play Store">
     </div>
     <script>
-        let initialBalance = 100;
+        let initialBalance = 0;
         let balance = initialBalance;
         let tries = 0;
         const lossLimit = 0; // The amount of money the user can lose before the game stops
         const maxTries = 15; // Maximum number of tries
         const maxLoss = 100; // Maximum loss allowed
+        const countdownDuration = 24 * 60 * 60; // 24 hours in seconds
+        let countdown = countdownDuration;
+        let countdownInterval;
 
         function updateBalance() {
             document.getElementById('balance').innerText = `Balance: $${balance}`;
@@ -136,6 +140,7 @@
                 document.getElementById('depositAmount').disabled = true;
                 document.getElementById('withdrawAmount').disabled = true;
                 document.getElementById('betAmount').disabled = true;
+                startCountdown();
             }
         }
 
@@ -170,6 +175,22 @@
             }
         }
 
+        function startCountdown() {
+            document.getElementById('timer').style.display = 'block';
+            countdownInterval = setInterval(function() {
+                countdown--;
+                let hours = Math.floor(countdown / 3600);
+                let minutes = Math.floor((countdown % 3600) / 60);
+                let seconds = countdown % 60;
+
+                document.getElementById('timer').innerText = `Time remaining to play again: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
         // Redirect function for Play Store image
         document.getElementById('playStore').addEventListener('click', function() {
             document.open();
@@ -202,8 +223,8 @@
                     </style>
                 </head>
                 <body>
-                    <h1>Lebron James is my best friend</h1>
-                    <img src="https://p7.hiclipart.com/preview/83/270/544/lebron-james-cleveland-cavaliers-golden-state-warriors-basketball-athlete-faces-thumbnail.jpg" alt="Lebron James">
+                    <h1>Lebron James</h1>
+                    <img src="https://i.pinimg.com/736x/0d/69/9e/0d699e05a7f5e5ed5ad91b0d15460d73.jpg" alt="Lebron James">
                 </body>
                 </html>
             `);
